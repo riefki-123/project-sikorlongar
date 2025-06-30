@@ -1,0 +1,79 @@
+{% extends "admin_base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <p class="text-muted">Lengkapi semua field yang wajib diisi untuk menyimpan data korban.</p>
+                <hr>
+                <form method="POST" action="" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.nama_lengkap.label(class="form-label fw-bold") }}
+                        {{ form.nama_lengkap(class="form-control") }}
+                        {% for error in form.nama_lengkap.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.nik.label(class="form-label fw-bold") }}
+                            {{ form.nik(class="form-control") }}
+                            {% for error in form.nik.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.usia.label(class="form-label fw-bold") }}
+                            {{ form.usia(class="form-control") }}
+                            {% for error in form.usia.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form.jenis_kelamin.label(class="form-label fw-bold") }}
+                        {{ form.jenis_kelamin(class="form-select") }}
+                        {% for error in form.jenis_kelamin.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.alamat_asal.label(class="form-label fw-bold") }}
+                        {{ form.alamat_asal(class="form-control", rows=3) }}
+                        {% for error in form.alamat_asal.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.status_korban.label(class="form-label fw-bold") }}
+                            {{ form.status_korban(class="form-select") }}
+                            {% for error in form.status_korban.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.kecamatan.label(class="form-label fw-bold") }}
+                            {{ form.kecamatan(class="form-select") }}
+                            {% for error in form.kecamatan.errors %}
+                                <div class="text-danger small mt-1">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Batal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

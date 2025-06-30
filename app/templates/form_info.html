@@ -1,0 +1,31 @@
+{% extends "admin_base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <p class="text-muted">Masukkan informasi atau pengumuman penting terkait status bencana di kecamatan ini. Informasi ini akan ditampilkan di halaman publik.</p>
+                <hr>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.konten.label(class="form-label fw-bold") }}
+                        {{ form.konten(class="form-control") }}
+                        {% for error in form.konten.errors %}
+                            <div class="text-danger small mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <a href="{{ url_for('main.daftar_info') }}" class="btn btn-secondary">Batal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

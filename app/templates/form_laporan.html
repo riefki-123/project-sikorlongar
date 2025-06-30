@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center">{{ title }}</h2>
+                <p class="text-center text-muted">Gunakan form ini untuk melaporkan jika Anda menemukan atau mengidentifikasi korban.</p>
+                <hr>
+                <form method="POST" action="" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.nama_pelapor.label(class="form-label") }}
+                        {{ form.nama_pelapor(class="form-control") }}
+                        {% for error in form.nama_pelapor.errors %}
+                            <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.kontak_pelapor.label(class="form-label") }}
+                        {{ form.kontak_pelapor(class="form-control") }}
+                        {% for error in form.kontak_pelapor.errors %}
+                            <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        {{ form.nama_korban_dilaporkan.label(class="form-label") }}
+                        {{ form.nama_korban_dilaporkan(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.status_korban.label(class="form-label") }}
+                        {{ form.status_korban(class="form-control") }}
+                        {% for error in form.status_korban.errors %}
+                            <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.kecamatan.label(class="form-label") }}
+                        {{ form.kecamatan(class="form-control") }}
+                        {% for error in form.kecamatan.errors %}
+                            <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.lokasi_penemuan.label(class="form-label") }}
+                        {{ form.lokasi_penemuan(class="form-control", rows=2) }}
+                        {% for error in form.lokasi_penemuan.errors %}
+                            <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.kondisi_saat_ditemukan.label(class="form-label") }}
+                        {{ form.kondisi_saat_ditemukan(class="form-control", rows=2) }}
+                        {% for error in form.kondisi_saat_ditemukan.errors %}
+                            <span class="text-danger">[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-4">
+                        {{ form.submit(class="btn btn-primary") }}
+                        <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Batal</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

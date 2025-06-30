@@ -1,0 +1,53 @@
+{% extends "admin_base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block admin_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="m-0">Rincian Data Korban</h4>
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-sm btn-outline-secondary">Kembali ke Dashboard</a>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Nama Lengkap</dt>
+                    <dd class="col-sm-8">{{ korban.nama_lengkap }}</dd>
+
+                    <dt class="col-sm-4">NIK</dt>
+                    <dd class="col-sm-8">{{ korban.nik or '-' }}</dd>
+
+                    <dt class="col-sm-4">Usia</dt>
+                    <dd class="col-sm-8">{{ korban.usia or '-' }} tahun</dd>
+
+                    <dt class="col-sm-4">Jenis Kelamin</dt>
+                    <dd class="col-sm-8">{{ korban.jenis_kelamin }}</dd>
+
+                    <dt class="col-sm-4">Status Terakhir</dt>
+                    <dd class="col-sm-8"><span class="badge bg-primary fs-6">{{ korban.status_korban }}</span></dd>
+                    
+                    <dt class="col-sm-4">Kecamatan Ditemukan</dt>
+                    <dd class="col-sm-8">{{ korban.kecamatan.nama_kecamatan }}</dd>
+
+                    <dt class="col-sm-4">Alamat Asal</dt>
+                    <dd class="col-sm-8">{{ korban.alamat_asal or '-' }}</dd>
+
+                    <dt class="col-sm-4">Catatan Tambahan</dt>
+                    <dd class="col-sm-8">{{ korban.catatan or '-' }}</dd>
+                    
+                    <dt class="col-sm-4 border-top pt-3 mt-3">Update Terakhir Pada</dt>
+                    <dd class="col-sm-8 border-top pt-3 mt-3">{{ korban.tanggal_update.strftime('%d %B %Y, %H:%M:%S') }}</dd>
+
+                    <dt class="col-sm-4">Diupdate oleh</dt>
+                    <dd class="col-sm-8">Petugas {{ korban.petugas.nama_lengkap }}</dd>
+                </dl>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{{ url_for('main.edit_korban', id=korban.id) }}" class="btn btn-warning">Edit Data Ini</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

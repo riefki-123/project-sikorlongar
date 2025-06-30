@@ -1,0 +1,54 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Verifikasi Laporan{% endblock %}
+{% block page_title %}Verifikasi Laporan Masyarakat{% endblock %}
+
+{% block admin_content %}
+    <p class="lead">
+        Tinjau laporan yang masuk dari masyarakat di bawah ini.
+    </p>
+    <p>
+        Setujui laporan untuk secara otomatis menambahkannya ke data korban utama, atau tolak jika laporan tidak valid atau duplikat.
+    </p>
+    <hr>
+
+    {% if daftar_laporan %}
+        {% for laporan in daftar_laporan %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-header d-flex justify-content-between">
+                <span>Laporan dari: <strong>{{ laporan.nama_pelapor }}</strong></span>
+                <span class="text-muted">{{ laporan.tanggal_laporan.strftime('%d %b %Y, %H:%M') }}</span>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">Kontak Pelapor</dt>
+                    <dd class="col-sm-9">{{ laporan.kontak_pelapor }}</dd>
+
+                    <dt class="col-sm-3">Nama Korban Dilaporkan</dt>
+                    <dd class="col-sm-9">{{ laporan.nama_korban_dilaporkan or 'Tidak disebutkan' }}</dd>
+
+                    <dt class="col-sm-3">Lokasi Penemuan</dt>
+                    <dd class="col-sm-9">{{ laporan.lokasi_penemuan }}</dd>
+
+                    <dt class="col-sm-3">Kondisi Saat Ditemukan</dt>
+                    <dd class="col-sm-9">{{ laporan.kondisi_saat_ditemukan }}</dd>
+                </dl>
+            </div>
+            <div class="card-footer text-end">
+                <form action="{{ url_for('main.tolak_laporan', id=laporan.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-secondary" onclick="return confirm('Apakah Anda yakin ingin MENOLAK laporan ini?');">Tolak</button>
+                </form>
+                <form action="{{ url_for('main.setujui_laporan', id=laporan.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-success" onclick="return confirm('SETUJUI laporan ini dan tambahkan ke data korban?');">Setujui & Tambahkan</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-success">
+            <h4 class="alert-heading">Kerja Bagus!</h4>
+            <p>Tidak ada laporan baru yang perlu diverifikasi saat ini. Semua laporan sudah ditindaklanjuti.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}

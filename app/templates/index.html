@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">Informasi Tanggap Bencana</h1>
+        <p class="hero-subtitle">Cari data korban atau laporkan temuan untuk membantu proses evakuasi dan pendataan.</p>
+        
+        <div class="hero-search-form">
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+                <div class="input-group">
+                    {{ form.query(class="form-control form-control-lg", placeholder="Cari berdasarkan Nama atau NIK...") }}
+                    {{ form.submit(class="btn btn-primary btn-lg") }}
+                </div>
+                {% for error in form.query.errors %}
+                    <div class="text-warning small mt-2">{{ error }}</div>
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if hasil_pencarian %}
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h3 class="m-0">Hasil Pencarian:</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nama Lengkap</th>
+                            <th scope="col">Usia</th>
+                            <th scope="col">Jenis Kelamin</th>
+                            <th scope="col">Status Terakhir</th>
+                            <th scope="col">Lokasi/Kecamatan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for korban in hasil_pencarian %}
+                        <tr>
+                            <td>{{ korban.nama_lengkap }}</td>
+                            <td>{{ korban.usia or 'N/A' }}</td>
+                            <td>{{ korban.jenis_kelamin }}</td>
+                            <td><span class="badge bg-info text-dark">{{ korban.status_korban }}</span></td>
+                            <td>{{ korban.kecamatan.nama_kecamatan }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<section class="feature-section">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-6">
+                <div class="feature-card p-4">
+                    <h4 class="card-title">Lihat Info Bencana</h4>
+                    <p class="card-text">Dapatkan pembaruan status dan informasi penting mengenai kondisi di setiap kecamatan terdampak.</p>
+                    <a href="{{ url_for('main.public_info_list') }}" class="btn btn-primary">Lihat Sekarang</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card p-4">
+                    <h4 class="card-title">Punya Laporan Temuan?</h4>
+                    <p class="card-text">Setiap informasi sangat berharga. Laporkan temuan atau identifikasi korban untuk membantu kami.</p>
+                    <a href="{{ url_for('main.lapor') }}" class="btn btn-orange">Buat Laporan</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about">
+    <div class="container">
+        <div class="about-content">
+            <div class="about-text">
+              <h2 class="section-title">Tentang Sikorlongar</h2>
+              <p>Sistem Informasi Korban Bencana Longsor Kabupaten Garut merupakan platform digital yang dirancang untuk memberikan respons cepat dan efektif dalam situasi darurat. Kami berkomitmen melindungi seluruh masyarakat Garut dengan teknologi terdepan.</p>
+              <p>Platform ini menghubungkan seluruh elemen masyarakat, petugas, dan instansi terkait dalam satu ekosistem informasi yang terintegrasi untuk meminimalkan dampak bencana.</p>
+            </div>
+            <div class="about-image">
+              <img src="https://fastly.picsum.photos/id/121/1600/1067.jpg?hmac=QDrnlQAvC_54xDpx2afpzKMbjCZvnRljseYvkK8XPCQ" alt="Emergency Response Team" />
+            </div>
+        </div>
+          
+        <div class="stats-section">
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-number" data-target="42">0</div>
+                <div class="stat-label">Kecamatan</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" data-target="421">0</div>
+                <div class="stat-label">Desa</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" data-target="500">0</div>
+                <div class="stat-label">+Kunjungan</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-number" data-target="10">0</div>
+                <div class="stat-label">Top 10 Ciboston Verified</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+{% endblock %}

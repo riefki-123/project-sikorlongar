@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <h1 class="display-6 fw-bold">Hasil Pencarian</h1>
+            <p class="text-muted">Menampilkan hasil pencarian untuk kata kunci: "<strong>{{ query }}</strong>"</p>
+
+            <form method="GET" action="{{ url_for('main.pencarian') }}" class="my-4">
+                <div class="input-group">
+                    {{ form.query(name="query", class="form-control", placeholder="Lakukan pencarian baru...") }}
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+            <hr>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if hasil_pencarian %}
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Nama Lengkap</th>
+                                    <th>Usia</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Status Terakhir</th>
+                                    <th>Lokasi/Kecamatan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for korban in hasil_pencarian %}
+                                <tr>
+                                    <td>{{ korban.nama_lengkap }}</td>
+                                    <td>{{ korban.usia or 'N/A' }}</td>
+                                    <td>{{ korban.jenis_kelamin }}</td>
+                                    <td><span class="badge bg-info text-dark">{{ korban.status_korban }}</span></td>
+                                    <td>{{ korban.kecamatan.nama_kecamatan }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

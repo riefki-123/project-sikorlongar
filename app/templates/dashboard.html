@@ -1,0 +1,169 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block admin_content %}
+    <h2 class="mb-4">Dashboard</h2>
+
+    <!-- Kartu Statistik -->
+    <div class="row">
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Korban</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_korban }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Ulangi untuk setiap status -->
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-success shadow h-100 py-2 stat-card">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Selamat</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ statistik_status['Selamat'] or 0 }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2 stat-card">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Luka Ringan</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ statistik_status['Luka Ringan'] or 0 }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-danger shadow h-100 py-2 stat-card">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Luka Berat</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ statistik_status['Luka Berat'] or 0 }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-info shadow h-100 py-2 stat-card">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Hilang</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ statistik_status['Hilang'] or 0 }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-dark shadow h-100 py-2 stat-card">
+                <div class="card-body">
+                    <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">Meninggal</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ statistik_status['Meninggal Dunia'] or 0 }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Baris untuk Laporan Terbaru dan Tabel Korban Utama -->
+    <div class="row">
+        <!-- Kolom Laporan Terbaru -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Laporan Terbaru dari Masyarakat</h6>
+                </div>
+                <div class="card-body">
+                    {% if laporan_terbaru %}
+                        {% for laporan in laporan_terbaru %}
+                        <div class="mb-3">
+                            <strong>{{ laporan.nama_pelapor }}</strong> melaporkan:
+                            <p class="mb-0 text-muted small">{{ laporan.kondisi_saat_ditemukan | truncate(100) }}</p>
+                            <small>{{ laporan.tanggal_laporan.strftime('%d %b %Y') }}</small>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    {% else %}
+                        <p>Tidak ada laporan baru.</p>
+                    {% endif %}
+                    <a href="{{ url_for('main.daftar_laporan') }}">Lihat Semua Laporan &rarr;</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolom Tabel Data Korban -->
+        <div class="col-lg-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Semua Data Korban</h6>
+                    <a href="{{ url_for('main.tambah_korban') }}" class="btn btn-sm btn-primary">Tambah Korban</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nama Lengkap</th>
+                                    <th>Status</th>
+                                    <th>Kecamatan</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for korban in daftar_korban %}
+                                <tr>
+                                    <td>{{ korban.nama_lengkap }}</td>
+                                    <td>{{ korban.status_korban }}</td>
+                                    <td>{{ korban.kecamatan.nama_kecamatan }}</td>
+                                    <td>
+                                        <a href="{{ url_for('main.detail_korban', id=korban.id) }}" class="btn btn-sm btn-info">D</a>
+                                        <a href="{{ url_for('main.edit_korban', id=korban.id) }}" class="btn btn-sm btn-warning">E</a>
+                                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#konfirmasiHapusModal" 
+                                                data-nama-korban="{{ korban.nama_lengkap }}" 
+                                                data-url-hapus="{{ url_for('main.hapus_korban', id=korban.id) }}">
+                                            H
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Konfirmasi Hapus (tetap sama) -->
+    <div class="modal fade" id="konfirmasiHapusModal" tabindex="-1" aria-labelledby="konfirmasiHapusModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="konfirmasiHapusModalLabel">Konfirmasi Penghapusan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus data korban an. <strong id="namaKorbanDiModal"></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <form id="formHapusModal" method="POST" action="">
+                        <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const konfirmasiHapusModal = document.getElementById('konfirmasiHapusModal');
+        konfirmasiHapusModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const nama = button.getAttribute('data-nama-korban');
+            const url = button.getAttribute('data-url-hapus');
+            const namaKorbanElement = konfirmasiHapusModal.querySelector('#namaKorbanDiModal');
+            const formHapus = konfirmasiHapusModal.querySelector('#formHapusModal');
+            namaKorbanElement.textContent = nama;
+            formHapus.action = url;
+        });
+    </script>
+{% endblock %}

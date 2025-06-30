@@ -1,0 +1,15 @@
+{% extends "admin_base.html" %}
+
+{% block admin_content %}
+<h2>{{ title }}</h2>
+<p>Pilih kecamatan untuk menambah atau mengubah informasi status bencana terkini.</p>
+<hr>
+<div class="list-group">
+  {% for kec in daftar_kecamatan %}
+    <a href="{{ url_for('main.edit_info_bencana', kecamatan_id=kec.id) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+      {{ kec.nama_kecamatan }}
+      <span class="badge bg-primary rounded-pill">Edit Info</span>
+    </a>
+  {% endfor %}
+</div>
+{% endblock %}
